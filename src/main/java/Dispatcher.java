@@ -1,28 +1,35 @@
 import controller.BankController;
+import controller.RequestMapping;
+import lombok.AllArgsConstructor;
 
 import java.lang.reflect.Method;
 
+/**
+ * 책임 : 라우팅
+ */
+@AllArgsConstructor
 public class Dispatcher {
-    private BankController controller;
 
-    public Dispatcher(BankController controller) {
-        this.controller = controller;
-    }
+    private BankController con;
 
-    public void route(String uri) {
-        Method[] methods = controller.getMethods();
+    public void route(String path){
 
-        for (Method method : methods) {
+        Method[] methods = con.getClass().getDeclaredMethods();
+
+        for(Method method : methods){
             RequestMapping rm = method.getDeclaredAnnotation(RequestMapping.class);
 
-            if (rm != null && rm.uri().equals(uri)) {
+            if(rm == null) continue;
+
+            if(rm.uri().equals(path)){
                 try {
-                    method.invoke(controller);
+                    method.invoke(con);
                     break;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
         }
     }
 }

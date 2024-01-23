@@ -1,12 +1,13 @@
 import controller.BankController;
+import dao.BankDAO;
 
 public class BankApp {
     public static void main(String[] args) {
-        String uri = "selectAll";
+        String uri = "/withdraw";
 
-        BankController controller = new BankController();
-        Dispatcher dispatcher = new Dispatcher(controller);
-
-        dispatcher.route(uri);
+        BankDAO dao = new BankDAO();
+        BankController con = new BankController(dao);
+        Dispatcher dis = new Dispatcher(con);
+        dis.route(uri);
     }
 }
